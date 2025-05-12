@@ -6,7 +6,7 @@ import java.util.HashMap;
 
 public class DataRepository {
     private String name;
-    private HashMap<Integer, DataEntry> dataEntries = new HashMap<>();
+    private HashMap<Integer, DataEntry> dataEntries;
 
     public DataRepository(String name, DataEntry[] dataEntries) throws DataRepositoryException {
         this.dataEntries = new HashMap<>();
@@ -31,21 +31,34 @@ public class DataRepository {
         if (dataEntry == null)
             throw new DataRepositoryException(DataRepositoryException.ERROR_DATA_ENTRY_NULL);
         if (dataEntries.containsKey(dataEntry.getId()))
-            throw new DataRepositoryException(DataRepositoryException.ERROR_DATA_EXISTS);
+            throw new DataRepositoryException(DataRepositoryException.ERROR_ENTRY_ALREADY_EXISTS);
         dataEntries.put(dataEntry.getId(), dataEntry);
     }
 
     public DataEntry getDataEntry(int id) throws DataRepositoryException {
         if (!dataEntries.containsKey(id))
-            throw new DataRepositoryException(DataRepositoryException.ERROR_DATA_NOT_FOUND);
+            throw new DataRepositoryException(DataRepositoryException.ERROR_DATA_ENTRY_NOT_FOUND);
         return dataEntries.get(id);
     }
 
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("{\n  \"name\": \"").append(name).append("\",\n  \"dataEntries\": [\n");
-        dataEntries.values().forEach(entry -> sb.append("    ").append(entry).append(",\n"));
-        if (!dataEntries.isEmpty()) sb.deleteCharAt(sb.length()-2);
+        sb.append("{\n");
+        sb.append("  \"name\": \"").append(name).append("\",\n");
+        sb.append("  \"dataEntries\": [\n");
+
+        int count = 0;
+        int size = dataEntries.size();
+        for (DataEntry entry : dataEntries.values()) {
+            sb.append(entry.toString());
+            count++;
+            if (count < size) {
+                sb.append(",\n");
+            } else {
+                sb.append("\n");
+            }
+        }
+
         sb.append("  ]\n}");
         return sb.toString();
     }

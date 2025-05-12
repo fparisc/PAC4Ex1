@@ -57,9 +57,8 @@ public class ResearchCenter {
     }
 
     public void setPhoneNumber(String phone) throws ResearchCenterException {
-        String regex = "^\\+?[0-9\\-]{7,}$";
-        if (phone == null || !Pattern.matches(regex, phone))
-            throw new ResearchCenterException(ResearchCenterException.ERROR_PHONE);
+        if (phone == null || !phone.matches( "^\\+?[0-9]{7,}$"))
+            throw new ResearchCenterException(ResearchCenterException.ERROR_PHONE_NUMBER);
         this.phoneNumber = phone;
     }
 
@@ -78,10 +77,12 @@ public class ResearchCenter {
         return dataRepository;
     }
 
-    public void setDataRepository(DataRepository dataRepository) {
+    public void setDataRepository(DataRepository dataRepository) throws ResearchCenterException {
+        if (dataRepository == null) {
+            throw new ResearchCenterException(ResearchCenterException.ERROR_DATA_REPOSITORY);
+        }
         this.dataRepository = dataRepository;
     }
-
     public String toString() {
         return String.format(
                 "{\n  \"name\": \"%s\",\n  \"city\": \"%s\",\n  \"address\": \"%s\",\n  \"phoneNumber\": \"%s\",\n  \"email\": \"%s\",\n  \"dataRepository\": %s\n}",
