@@ -6,6 +6,7 @@ import edu.uoc.pac4.exception.ResearchCenterException;
 import java.util.regex.Pattern;
 
 public class ResearchCenter {
+
     private String name;
     private String city;
     private String address;
@@ -27,8 +28,11 @@ public class ResearchCenter {
     }
 
     public void setName(String name) throws ResearchCenterException {
-        if (name == null || name.isBlank())
+
+        if (name == null || name.isBlank()) {
             throw new ResearchCenterException(ResearchCenterException.ERROR_NAME);
+        }
+
         this.name = name.trim();
     }
 
@@ -37,8 +41,11 @@ public class ResearchCenter {
     }
 
     public void setCity(String city) throws ResearchCenterException {
-        if (city == null)
+
+        if (city == null) {
             throw new ResearchCenterException(ResearchCenterException.ERROR_CITY);
+        }
+
         this.city = city.trim();
     }
 
@@ -47,8 +54,11 @@ public class ResearchCenter {
     }
 
     public void setAddress(String address) throws ResearchCenterException {
-        if (address == null)
+
+        if (address == null) {
             throw new ResearchCenterException(ResearchCenterException.ERROR_ADDRESS);
+        }
+
         this.address = address.trim();
     }
 
@@ -57,8 +67,11 @@ public class ResearchCenter {
     }
 
     public void setPhoneNumber(String phone) throws ResearchCenterException {
-        if (phone == null || !phone.matches( "^\\+?[0-9]{7,}$"))
+
+        if (phone == null || !phone.matches( "^\\+?[0-9]{7,}$")) {
             throw new ResearchCenterException(ResearchCenterException.ERROR_PHONE_NUMBER);
+        }
+
         this.phoneNumber = phone;
     }
 
@@ -67,9 +80,11 @@ public class ResearchCenter {
     }
 
     public void setEmail(String email) throws ResearchCenterException {
-        String regex = "^[a-z0-9._-]+@[a-z0-9-]+\\.[a-z]{2,}$";
-        if (email == null || !Pattern.matches(regex, email))
+
+        if (email == null || !Pattern.matches("^[a-z0-9._-]+@[a-z0-9-]+\\.[a-z]{2,}$", email)) {
             throw new ResearchCenterException(ResearchCenterException.ERROR_EMAIL);
+        }
+
         this.email = email;
     }
 
@@ -78,12 +93,17 @@ public class ResearchCenter {
     }
 
     public void setDataRepository(DataRepository dataRepository) throws ResearchCenterException {
+
         if (dataRepository == null) {
             throw new ResearchCenterException(ResearchCenterException.ERROR_DATA_REPOSITORY);
         }
+
         this.dataRepository = dataRepository;
     }
+
+    @Override
     public String toString() {
+
         return String.format(
                 "{\n  \"name\": \"%s\",\n  \"city\": \"%s\",\n  \"address\": \"%s\",\n  \"phoneNumber\": \"%s\",\n  \"email\": \"%s\",\n  \"dataRepository\": %s\n}",
                 name, city, address, phoneNumber, email, dataRepository

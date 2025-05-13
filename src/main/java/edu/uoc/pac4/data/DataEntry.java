@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class DataEntry {
+
     private int id;
     private String title;
     private LocalDateTime timestamp;
@@ -24,8 +25,9 @@ public class DataEntry {
 
     public void setId(int id) throws DataEntryException {
         if (id <= 0) {
-            throw new DataEntryException("ID cannot be negative or zero.");
+            throw new DataEntryException(DataEntryException.ERROR_ID);
         }
+
         this.id = id;
     }
 
@@ -35,8 +37,9 @@ public class DataEntry {
 
     public void setTitle(String title) throws DataEntryException {
         if (title == null || title.trim().isEmpty()) {
-            throw new DataEntryException("Title cannot be null or blank.");
+            throw new DataEntryException(DataEntryException.ERROR_TITLE);
         }
+
         this.title = title.trim();
     }
 
@@ -46,8 +49,9 @@ public class DataEntry {
 
     public void setTimestamp(LocalDateTime timestamp) throws DataEntryException {
         if (timestamp == null || timestamp.isAfter(LocalDateTime.now())) {
-            throw new DataEntryException("Timestamp cannot be null or in the future.");
+            throw new DataEntryException(DataEntryException.ERROR_TIMESTAMP);
         }
+
         this.timestamp = timestamp;
     }
 
@@ -57,11 +61,13 @@ public class DataEntry {
 
     public void setObservations(String observations) throws DataEntryException {
         if (observations == null) {
-            throw new DataEntryException("Observations cannot be null.");
+            throw new DataEntryException(DataEntryException.ERROR_OBSERVATIONS);
         }
+
         this.observations = observations.trim();
     }
 
+    @Override
     public String toString() {
         return String.format(
                 "{\n  \"id\": %d,\n  \"title\": \"%s\",\n  \"timestamp\": \"%s\",\n  \"observations\": \"%s\"\n}",
@@ -69,9 +75,16 @@ public class DataEntry {
         );
     }
 
+    @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (!(obj instanceof DataEntry other)) return false;
+        if (this == obj) {
+            return true;
+        }
+
+        if (!(obj instanceof DataEntry other)) {
+            return false;
+        }
+
         return Objects.equals(this.title, other.title)
                 && Objects.equals(this.timestamp, other.timestamp)
                 && Objects.equals(this.observations, other.observations);
